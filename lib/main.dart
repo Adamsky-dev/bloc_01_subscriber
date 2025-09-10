@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'bloc/subscriber_bloc.dart';
-import 'bloc/subscriber_event.dart';
-import 'bloc/subscriber_state.dart';
+import 'package:bloc_01_subscriber/cubit/subscriber_cubit.dart';
 
 void main() {
   runApp(SubscriberApp());
@@ -18,7 +16,7 @@ class SubscriberApp extends StatelessWidget {
       title: 'YouTube Subscriber Counter',
       theme: ThemeData(primarySwatch: Colors.red),
       home: BlocProvider(
-        create: (_) => SubscriberBloc(),
+        create: (_) => SubscriberCubit(),
         child: SubscriberPage(),
       ),
     );
@@ -35,7 +33,7 @@ class SubscriberPage extends StatelessWidget {
         title: Text('YouTube Subscriber Counter'),
         centerTitle: true,
       ),
-      body: BlocConsumer<SubscriberBloc, SubscriberState>(
+      body: BlocConsumer<SubscriberCubit, SubscriberState>(
         listener: (context, state) {
           if (state.count == 0) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -80,7 +78,7 @@ class SubscriberPage extends StatelessWidget {
             FloatingActionButton(
               heroTag: 'unsubscribe',
               onPressed: () {
-                context.read<SubscriberBloc>().add(Unsubscribe());
+                context.read<SubscriberCubit>().decrement();
               },
               tooltip: 'Unsubscribe',
               backgroundColor: Colors.redAccent,
@@ -90,7 +88,7 @@ class SubscriberPage extends StatelessWidget {
             FloatingActionButton(
               heroTag: 'subscribe',
               onPressed: () {
-                context.read<SubscriberBloc>().add(Subscribe());
+                context.read<SubscriberCubit>().increment();
               },
               tooltip: 'Subscribe',
               backgroundColor: Colors.green,
